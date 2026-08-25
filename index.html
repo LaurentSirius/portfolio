@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Laurent — Portfolio</title>
+<meta name="description" content="Portfolio de Laurent. Miniatures de projets cliquables." />
+<meta name="theme-color" content="#0c0d0a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0d0a'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23c6f135'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg:#0c0d0a; --fg:#eef2e6; --muted:#8d9286; --line:#26281f;
+  --accent:#c6f135; --ink:#14180a; --card:#181910; --max:1120px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--fg); font-family:Outfit,system-ui,sans-serif; line-height:1.5; min-height:100dvh; overflow-x:hidden; }
+a { color:inherit; text-decoration:none; cursor:pointer; }
+img { max-width:100%; display:block; }
+.wrap { width:min(100% - 40px, var(--max)); margin-inline:auto; }
+header { position:sticky; top:0; z-index:20; backdrop-filter:blur(16px); background:rgba(12,13,10,.78); border-bottom:1px solid var(--line); }
+.nav { display:flex; align-items:center; justify-content:space-between; height:72px; gap:16px; }
+.brand { display:flex; align-items:center; gap:12px; font-family:Syne,sans-serif; font-weight:700; letter-spacing:-.03em; }
+.brand img { width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid var(--line); }
+.nav-links { display:flex; gap:8px; align-items:center; }
+.nav-links a { color:var(--muted); font-size:.9rem; padding:10px 12px; min-height:44px; display:inline-flex; align-items:center; }
+.nav-links a:hover { color:var(--fg); }
+.nav-cta { background:var(--accent) !important; color:var(--ink) !important; border-radius:999px; padding:10px 16px !important; font-weight:600; font-size:.85rem !important; }
+.hero { padding:72px 0 56px; display:grid; gap:24px; }
+.kicker { display:inline-flex; align-items:center; gap:10px; color:var(--muted); font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; }
+.kicker i { width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block; }
+h1 { font-family:Syne,sans-serif; font-weight:800; font-size:clamp(2.6rem,8vw,6.2rem); line-height:.92; letter-spacing:-.05em; }
+h1 em { font-style:italic; color:var(--accent); }
+.lede { max-width:38rem; color:var(--muted); font-size:1.12rem; font-weight:300; }
+#projets { padding:12px 0 96px; }
+.section-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:22px; gap:16px; }
+.section-head h2 { font-family:Syne,sans-serif; font-size:.95rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+.grid { display:grid; grid-template-columns:1fr; gap:18px; }
+@media (min-width:760px) {
+  .grid { grid-template-columns:1fr 1fr; }
+  .card.featured { grid-column:1/-1; }
+  .card.featured .thumb { min-height:340px; }
+}
+.card { display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line); border-radius:22px; overflow:hidden; transition:transform 280ms var(--ease), border-color 280ms var(--ease); }
+.card:hover { transform:translateY(-4px); border-color:#5a6a28; }
+.thumb { position:relative; min-height:220px; overflow:hidden; }
+.scene { position:absolute; inset:0; transition:transform 500ms var(--ease); }
+.card:hover .scene { transform:scale(1.06); }
+.chrome { position:absolute; top:14px; left:14px; z-index:2; display:flex; gap:6px; }
+.chrome b { width:9px; height:9px; border-radius:50%; background:#3a3d32; display:block; }
+.meta { display:grid; grid-template-columns:auto 1fr auto; gap:10px 16px; align-items:end; padding:18px 20px 20px; }
+.idx { font-family:Syne,sans-serif; color:var(--accent); font-size:.85rem; }
+.meta h3 { font-family:Syne,sans-serif; font-size:1.25rem; letter-spacing:-.03em; line-height:1.15; }
+.meta p { grid-column:1/-1; color:var(--muted); font-size:.92rem; }
+.go { display:inline-flex; align-items:center; gap:6px; font-size:.82rem; font-weight:600; color:var(--accent); white-space:nowrap; }
+.go svg { width:16px; height:16px; transition:transform 220ms var(--ease); }
+.card:hover .go svg { transform:translate(3px,-3px); }
+.tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+.tag { font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 8px; }
+.scene-scroll { background:radial-gradient(120% 80% at 80% 120%,#1d2a08,transparent 50%),linear-gradient(#101208,#0b0c0a); }
+.rail { position:absolute; left:18%; top:-20%; width:64%; display:grid; gap:10px; animation:drift 14s linear infinite; }
+.bar { height:42px; border-radius:10px; background:linear-gradient(90deg,#2a3318,#1a1f10); border:1px solid #3a4420; }
+.bar:nth-child(odd) { background:linear-gradient(90deg,#c6f135,#8fb81a); opacity:.85; }
+@keyframes drift { to { transform:translateY(-45%); } }
+.scene-orbit { background:radial-gradient(circle at 50% 55%,#243010,#0c0d0a 62%); }
+.ring { position:absolute; left:50%; top:54%; width:180px; height:180px; margin:-90px 0 0 -90px; border:1px dashed #3e4a22; border-radius:50%; animation:spin 18s linear infinite; }
+.ring.big { width:250px; height:250px; margin:-125px 0 0 -125px; animation-duration:28s; animation-direction:reverse; }
+.dot { position:absolute; width:18px; height:18px; border-radius:50%; background:var(--accent); top:-9px; left:calc(50% - 9px); }
+.dot.alt { background:#f2efe4; top:auto; bottom:-9px; }
+.core { position:absolute; left:50%; top:54%; width:54px; height:54px; margin:-27px 0 0 -27px; border-radius:50%; background:var(--accent); box-shadow:0 0 40px #c6f13566; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.scene-code { background:#0f120c; display:grid; align-content:center; padding:48px 28px 28px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.7; color:#9aa38c; }
+.scene-code .kw { color:var(--accent); }
+.scene-code .cm { color:#5c6354; }
+.scene-lab { background:radial-gradient(60% 80% at 20% 80%,#1b2a0c,transparent 60%),#101208; }
+.blob { position:absolute; width:160px; height:90px; left:50%; top:50%; margin:-45px 0 0 -80px; background:#d8c7a4; border-radius:50% 50% 45% 55%; box-shadow:20px 10px 0 -8px #cbb48a; }
+#apropos, #contact { padding:0 0 96px; }
+.split { display:grid; gap:28px; border-top:1px solid var(--line); padding-top:48px; }
+@media (min-width:760px) { .split { grid-template-columns:.8fr 1.2fr; gap:64px; } }
+.split h2 { font-family:Syne,sans-serif; font-size:clamp(2rem,4vw,3rem); letter-spacing:-.04em; line-height:1; }
+.split p { color:var(--muted); font-size:1.05rem; font-weight:300; margin-top:12px; }
+.facts { display:grid; gap:14px; margin-top:24px; }
+.facts div { display:flex; justify-content:space-between; gap:16px; border-bottom:1px solid var(--line); padding-bottom:12px; }
+.facts span { color:var(--muted); }
+.contact-row { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+.pill { display:inline-flex; align-items:center; min-height:44px; padding:10px 16px; border-radius:999px; border:1px solid var(--line); font-weight:500; }
+.pill:hover { background:var(--fg); color:var(--bg); }
+.pill.primary { background:var(--accent); color:var(--ink); border-color:var(--accent); }
+footer { border-top:1px solid var(--line); padding:28px 0 48px; color:var(--muted); font-size:.85rem; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none !important; transition:none !important; }
+}
+@media (max-width:640px) {
+  .wrap { width:min(100% - 28px, var(--max)); }
+  .nav-links a:not(.nav-cta) { display:none; }
+  .hero { padding-top:48px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <img src="https://avatars.githubusercontent.com/u/24230719?v=4" alt="Avatar de Laurent" width="36" height="36" />
+      Laurent
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#projets">Projets</a>
+      <a href="#apropos">A propos</a>
+      <a class="nav-cta" href="#contact">Me ecrire</a>
+    </nav>
+  </div>
+</header>
+<main id="top">
+  <section class="wrap hero">
+    <p class="kicker"><i></i> Portfolio · Liege</p>
+    <h1>Les projets,<br /><em>en miniatures.</em></h1>
+    <p class="lede">Cliquez une carte : elle ouvre le site du projet dans un nouvel onglet.</p>
+  </section>
+  <section id="projets" class="wrap">
+    <div class="section-head">
+      <h2>Selection</h2>
+      <span style="color:var(--muted);font-size:.85rem">Cliquez pour visiter</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+  <section id="apropos" class="wrap">
+    <div class="split">
+      <h2>A propos</h2>
+      <div>
+        <p>Je suis Laurent, developpeur a Liege. J aime les interfaces qui ont une physique : menus qui defilent, CSS qui tourne, themes d editeur qu on reconnait au premier regard.</p>
+        <div class="facts">
+          <div><span>Base</span><strong>Liege, Belgique</strong></div>
+          <div><span>Focus</span><strong>Front-end, motion, PHP / Laravel</strong></div>
+          <div><span>Code</span><strong>GitHub @LaurentSirius</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="wrap">
+    <div class="split">
+      <h2>Contact</h2>
+      <div>
+        <p>Un projet, une collab, une idee ? Ecrivez-moi.</p>
+        <div class="contact-row">
+          <a class="pill primary" href="mailto:Hereisak@gmail.com">Hereisak@gmail.com</a>
+          <a class="pill" href="https://github.com/LaurentSirius" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="wrap">
+  <footer>
+    <span>&copy; <span id="y"></span> Laurent</span>
+    <span>Liege</span>
+  </footer>
+</div>
+<script>
+const projects = [
+  { n:"01", title:"Vertical Scrolling Menu", desc:"Navigation verticale a defilement fluide — une etude d interaction jQuery.", tags:["JavaScript","UI"], url:"https://github.com/LaurentSirius/Vertical-Scrolling-Menu", theme:"scroll", featured:true },
+  { n:"02", title:"Menu CSS Animation", desc:"Menu circulaire anime, icones food, zero JavaScript.", tags:["CSS","Motion"], url:"https://github.com/LaurentSirius/menu-css-animation", theme:"orbit" },
+  { n:"03", title:"GCKN Theme", desc:"Theme Visual Studio Code utilise dans mes videos depuis 2019.", tags:["VS Code","Design"], url:"https://marketplace.visualstudio.com/items?itemName=aolland.gckn-theme", theme:"code" },
+  { n:"04", title:"Le labo GitHub", desc:"Le reste des experiences et essais — ouvert a la visite.", tags:["Code"], url:"https://github.com/LaurentSirius", theme:"lab" }
+];
+const scenes = {
+  scroll: '<div class="scene scene-scroll"><div class="rail"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>',
+  orbit: '<div class="scene scene-orbit"><div class="ring"><b class="dot"></b><b class="dot alt"></b></div><div class="ring big"><b class="dot"></b></div><div class="core"></div></div>',
+  code: '<div class="scene scene-code"><div><span class="kw">const</span> theme = { ui: <span class="kw">"gckn"</span> }</div><div class="cm">// depuis le 09/05/2019</div><div>editor.foreground = <span class="kw">"#c6f135"</span></div></div>',
+  lab: '<div class="scene scene-lab"><div class="blob"></div></div>'
+};
+const arrow = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 12 L12 4 M6 4 H12 V10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+document.getElementById('grid').innerHTML = projects.map(function(p){
+  return '<a class="card'+(p.featured?' featured':'')+'" href="'+p.url+'" target="_blank" rel="noopener noreferrer"><div class="thumb"><div class="chrome" aria-hidden="true"><b></b><b></b><b></b></div>'+(scenes[p.theme]||scenes.lab)+'</div><div class="meta"><span class="idx">'+p.n+'</span><div><h3>'+p.title+'</h3><div class="tags">'+p.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')+'</div></div><span class="go">Voir le projet '+arrow+'</span><p>'+p.desc+'</p></div></a>';
+}).join('');
+document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
